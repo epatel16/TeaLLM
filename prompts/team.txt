@@ -1,0 +1,55 @@
+Solve a question answering task with interleaving Thought, Action, Observation steps. Thought can reason about the current situation, and Action can be four types: 
+(1) search | topic | guiding_question; which searches the closest article to the topic on Wikipedia and returns the sentences related to the guiding_question if it exists. If no such article exists, it will return a list of articles that may be similar. You can then use the search function on these articles if you wish. This function also sets the Wikipedia article globally. To change the article, you will need to run search again with a new topic.
+(2) crawl | guiding_question; which searches through the current Wikipedia article (the one set by the previous search function) for titles of other articles that are very closely related to the inputted guiding_question.
+(3) similar; which returns a list of articles that may be similar to the article set by the most recent search function.
+(4) finish | answer; which returns the answer and finishes your Thought, Action, Observation task.
+
+Note that you may make your guiding_question for each action as detailed as you wish, or not. Use your thought steps to come up with a good guiding_question.
+
+Here are some examples.
+EXAMPLE 1:
+Question: What is the elevation range for the area that the eastern sector of the Colorado orogeny extends into?
+Thought 1: I need to search Colorado orogeny, find the area that the eastern sector of the Colorado orogeny extends into, then find the elevation range of the area. I should start by finding definitions for the Colorado orogeny and it's eastern sector. 
+Action 1: search | Colorado orogeny | what is the eastern sector of the Colorado orogeny and what is its elevation? | elevation
+Observation 1: The eastern sector of the Colorado orogeny is called the Central Plains orogeny and extends into the High Plains. The boundary between the Colorado orogeny and the Wyoming craton is marked by the Cheyenne belt, a 5-km-wide mylonitic shear zone. The Paleoproterozoic rocks from the Colorado orogeny underwent metamorphism under moderate pressure and temperature conditions. The Colorado orogeny was likely part of the larger Yavapai orogeny, which extended across North America.
+Thought 2: It mentions that the eastern sector of the Colorado orgeny is called the Central Plains orogeny, however it does not say anything about the elevation. I should search for an article about the Central Plains orogeny and question its elevation range.
+Action 2: search | Central Plains orogeny | what is the elevation range of the Central Plains orogeny? | elevation
+Observation 2: The Central Plains orogeny is over 1,000 kilometers long and at least 500 kilometers wide, consisting of granitic and metamorphic rocks ranging from 1,630 to 1,800 million years in age. It is considered an extension of the fold belt in Colorado and southeastern Wyoming and is part of the Yavapai orogeny that occurred between 1780 and 1680 million years ago. The text does not specify the elevation range of the Central Plains orogeny.
+Thought 3: There is no mention of the elevation of the Central Plains orogeny. However, observation 1 indicated that the central plains orogeny extended into the high plains and is part of the Yavapi orogeny. First I need to search the high plains and find its elevation, and if I still don't have an answer, I will look at the Yavapi orogeny.
+Action 3: search | high plains | what is the elevation of the high plains? | elevation
+Observation 3: There is no information in the text about the elevation of the High Plains. The text is about the 1973 American Western film "High Plains Drifter," directed by Clint Eastwood, where a mysterious stranger seeks justice in a corrupt frontier mining town.
+Thought 4: I searched high plains, but the text is clearly about the wrong high plains. Let me check similar articles to try and find something about the geographic high plains.
+Action 4: similar
+Observation 4: High Plains
+High Plains (United States)
+High Plains Invaders
+Great Plains
+Ogallala Aquifer
+Thought 5: I should search the high plains of the united states and ask about the elevation
+Action 5: search | High Plains (United States) | what is the elevation of the high plains? | elevation
+Observation 5: The High Plains rise in elevation from around 1,800 to 7,000 ft (550 to 2,130 m) from east to west.
+Thought 6: This is the answer, 1,800 to 7,000 ft. The initial question was "What is the elevation range for the area that the eastern sector of the Colorado orogeny extends into?". My answer is a proper response to this type of question. I should finish the session.
+Action 6: finish | 1,800 to 7,000 ft
+
+EXAMPLE 2:
+Question: Musician and satirist Allie Goertz wrote a song about the "The Simpsons" character Milhouse, who Matt Groening named after who?
+Thought 1: The question simplifies to "The Simpsons" character Milhouse is named after who. I only need to search Milhouse and find who it is named after.
+Action 1: search | Milhouse | who is Milhouse named after? | named after
+Observation 1: Milhouse from "The Simpsons" is named after U.S. president Richard Milhous Nixon, chosen by Matt Groening as the most "unfortunate name" he could think of for a kid. The character was initially designed for a Butterfinger commercial before being included in the series. Additionally, Milhouse\'s last name was given by Howard Gewirtz, a freelance writer, who took it from one of his wife\'s friends.
+Thought 2: It states that Milhouse is named after U.S. president Richard Milhous Nixon, who was chosen by Matt Groening as the most "unfortunate name" he could think of for a kid. The original question asked about who Milhouse was named after. Thus, I can answer the question with Richard Milhous Nixon.
+Action 2: finish | Richard Milhous Nixon
+
+EXAMPLE 3:
+Question: Which famous Bollywood actor, who's name starts with H, has an extra thumb?
+Thought 1: I should search up bollywood actors and look for one with an extra thumb
+Action 1: search | bollywood actors | which actor has an extra thumb? | extra thumb
+Observation 1: There is no information in the text about an actor having an extra thumb. \n\nHindi cinema, known as Bollywood, is a major part of the Indian film industry, producing a large number of films each year. The industry is based in Mumbai and has been a significant center for film production globally. Bollywood films often incorporate elements of action, comedy, romance, drama, and music.
+Thought 2: There don't seem to be details about actors, however the article seems to have lots of information about Bollywood. I should crawl through this article for famous bollywood actors who's name starts with H and check each of their Wikipedia pages for an actor with an extra thumb.
+Action 2: crawl | who are some famous bollywood actors who's name starts with H?
+Observation 2: Hrithik Roshan, Helen (actress)
+Thought 3: I will start by checking Hrithik Roshan's Wikipedia page for whether he has an extra thumb
+Action 3: search | Hrithik Roshan | does Hrithik Roshan have an extra thumb? | extra thumb
+Observation 3: Hrithik Roshan was born with an extra thumb fused to the one on his right hand, which caused him to feel isolated as a child. He has also stammered since the age of six, leading to difficulties at school. Despite these challenges, he has become a successful Indian actor known for his dancing skills and has won numerous awards for his performances.
+Thought 4: Hrithik Roshan has an extra thumb and his name starts with H. The original question asked for a person, specifically a bollywood actor. Due to my earlier reasoning, Hrithik Roshan must be the correct answer.
+Action 4: finish | Hrithik Roshan
+
