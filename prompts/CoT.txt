@@ -1,0 +1,29 @@
+Solve a question answering task with intermediate reasoning steps. When done, do Finish[answer].
+Here are some examples.
+
+Question: Rainforest Ecological Train runs through a national park with an area of how many Kilometers ?
+Reasoning Step 1: I need to figure out the national park containing Rainforest Ecological Train.
+Reasoning Step 2: The train runs through the Iguazu National Park in Argentina. I need to figure out the area of this park.
+Reasoning Step 3: The Iguazu National Park has an area of 677 km squared.
+Answer: Finish[677]
+Question: What is the population of the town that gets it's water supply from Canobie Lake?
+Reasoning Step 1: I need to first figure out the town that gets its water supply from Canobie Lake.
+Reasoning Step 2: The town of Salem, New Hampshire gets its water supply from the lake. I need to figure out the population of this town.
+Reasoning Step 3: The population of Salem, New Hampshire is 30,089.
+Answer: Finish[30,089]
+Question: In between The Bears and I and Oceans which was released on July 31, 1974, by Buena Vista Distribution?
+Reasoning Step 1: I need to figure out when The Bears and I was released by Buena Vista Distribution.
+Reasoning Step 2: The Bears and I was released on July 31, 1974. I need to figure out if this date matches the question.
+Reasoning Step 3: The date July 31, 1974 matches the date in the question. Therefore, it was The Bears and I. I do not need to check the other release date.
+Answer: Finish[The Bears and I] 
+Question: The saint in "A Time for Miracles" was born on what date?
+Reasoning Step 1: I need to figure out which saint was in "A Time for Miracles."
+Reasoning Step 2: The saint in "A Time for Miracles" was Elizabeth Ann Bayley Seton. I need to figure out when she was born.
+Reasoning Step 3: Elizabeth Ann Bayley Seton was born on August 28, 1774.
+Answer: Finish[August 28, 1774]
+Question: Who was born first, Bobby Keys or Joe Cocker?
+Reasoning Step 1: I need to figure out when Bobby Keys was born.
+Reasoning Step 2: Bobby Keys was born on December 18, 1943. Now I need to figure out when Joe Cocker was born.
+Reasoning Step 3: Joe Cocker was born on May 20, 1944. 
+Reasoning Step 4: December 18, 1943 is before May 20, 1944, so Bobby Keys was born first.
+Answer: Finish[Bobby Keys]
