@@ -96,9 +96,6 @@ class WikiScraper:
             if 'title' in bs4_link.attrs:
                 self.links.append(bs4_link.attrs['title'])
                 self.link2url[bs4_link.attrs['title']] = bs4_link.attrs['href']
-        # [print(link) for link in self.links]
-        # print()
-        # # self.links = 
         
     def get_links(self):
         return self.links, self.link2url
@@ -114,12 +111,11 @@ class WikiScraper:
 
 class WikiSearch:
     
-    def __init__(self, api_key=None, prompt1_file='prompts/wiki_pt1.txt',
-                                     prompt2_file='prompts/wiki_pt2.txt',
-                                     crawl_file='prompts/wiki_crawl.txt'):
+    def __init__(self, api_key, prompt1_file='prompts/wiki_pt1.txt',
+                                prompt2_file='prompts/wiki_pt2.txt',
+                                crawl_file='prompts/wiki_crawl.txt'):
         self.scraper = WikiScraper()
-        if api_key is None: api_key = os.environ["OPENAI_API_KEY"]
-        self.client = openai.OpenAI()
+        self.client = openai.OpenAI(api_key=api_key)
         self.instructions = {}
         with open(prompt1_file, 'r') as f:
             self.instructions['headers'] = '\n'.join(f.readlines())
@@ -148,7 +144,7 @@ class WikiSearch:
             model="gpt-3.5-turbo",
             messages=self.messages,
             temperature=0,
-            # max_tokens=4096,
+            max_tokens=4096,
             top_p=1,
             frequency_penalty=0.0,
             presence_penalty=0.0,
@@ -156,8 +152,10 @@ class WikiSearch:
         self.messages.append(self.get_query('assistant', response.choices[0].message.content))
         return response.choices[0].message.content
     
-    def reset(self):
+    def reset(self, idx=None):
+        idx # remnant of wrapping functions...can (and should) ignore
         self.messages = []
+        self.steps = 0
         self.messages.append(self.get_query('system', self.instruction))
         self.answer = None
         self.obs = ("Interact with Wikipedia using search, crawl, similar, and finish[].\n")
@@ -176,12 +174,12 @@ class WikiSearch:
         title = self.scraper.title
         prompt = f'TITLE: {title}\nHEADERS:\n{headers}\nQUESTION: {question}'
         selected_headers = self.find_similar_headers(self.llm(prompt, instruction='headers'), headers)
-        # print(selected_headers)
         if selected_headers == []:
             return f'The article {title} was not found to have a relation to {question[:-1]}'
         
         # part 1.5
         keyparagraphs = self.scraper.get_paragraphs_with(keyphrase)
+        
         # part 2
         paragraphs = [self.scraper.get_subsection(header) for header in selected_headers] + keyparagraphs
         ret = ''
@@ -215,9 +213,6 @@ class WikiSearch:
         if not self.scraper.loaded:
             return 'No articles or similar articles were found with this topic. Please try a different topic.'
         return ', '.join(self.scraper.other_results)
-    
-    def access_sibling_article(self, name):
-        ...
         
     def finish(self, answer):
         return answer
@@ -277,7 +272,6 @@ class WikiSearch:
             raise Exception(f'WikiSearch: Unknown action {action} requested via request {request}')
         
         self.steps += 1
-        # print('THIS IS OBS', self.obs, request)
         return self.obs, reward, done, self._get_info()
         
 if __name__ == '__main__':

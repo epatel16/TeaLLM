@@ -118,8 +118,6 @@ class HotPotQAWrapper(gym.Wrapper):
     if info['answer'] is not None:
       pred = normalize_answer(self.data[self.data_idx][1])
       gt = normalize_answer(info['answer'])
-      print('OURS:', gt)
-      print('CORRECT:', pred)
       em = (pred == gt)
       f1 = f1_score(pred, gt)[0]
       return {'reward': em, 'em': em, 'f1': f1}
